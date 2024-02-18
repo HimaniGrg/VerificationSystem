@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "600175299859",
+    "project_id": "verificationsystem-622a5",
+    "storage_bucket": "verificationsystem-622a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600175299859:android:3993721b107524441adee6",
+        "android_client_info": {
+          "package_name": "com.example.verificationsystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIw7_HuTGJdjk69tIR2T5MDex4zXLPGD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
