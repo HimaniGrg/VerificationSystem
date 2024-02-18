@@ -14,27 +14,32 @@ class RegisterAuth {
     await _auth
         .verifyPhoneNumber(
       phoneNumber: phone,
-      timeout: Duration(seconds: 30),
+      timeout: const Duration(seconds: 30),
+      //callback to handle SMS
       verificationCompleted: (phoneAuthCredential) async {
         return;
       },
+      //handle if there is any error
       verificationFailed: (error) async {
         return;
       },
+      // handle when otp is send to device from Firebase
       codeSent: (verificationId, forceResendingToken) async {
         verifyId = verificationId;
         nextStep();
       },
+      // handle timeout
       codeAutoRetrievalTimeout: (verificationId) async {
         return;
       },
     )
+        //if in case error occurs
         .onError((error, stackTrace) {
       errorStep();
     });
   }
 
-  //function to verify OTP
+  //function to verify OTP and login
   static Future loginWithOTP({required String otp}) async {
     final cred = PhoneAuthProvider.credential(
         verificationId: verifyId,
@@ -43,6 +48,7 @@ class RegisterAuth {
 
     try {
       final user = await _auth.signInWithCredential(cred);
+      //check if user is signed in or not
       if (user.user != null) {
         return "Sucsess";
       } else {
@@ -50,7 +56,9 @@ class RegisterAuth {
       }
     } on FirebaseAuthException catch (e) {
       return e.message.toString();
-    } catch (e) {
+    }
+    //exception except firebase
+    catch (e) {
       return e.toString();
     }
   }
@@ -63,6 +71,6 @@ class RegisterAuth {
   //check whether user is logged in or not
   static Future<bool> isLoggedIn() async {
     var user = _auth.currentUser;
-    return user != null;
+    return user != null; // if there is user it return true else false
   }
 }
