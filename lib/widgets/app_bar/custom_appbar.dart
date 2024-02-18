@@ -7,6 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.height,
     required this.leadingIcon,
     required this.trailingIcon,
+    required this.automaticallyImplyLeading,
     required this.title,
   }) : super(
           key: key,
@@ -17,6 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final IconData leadingIcon;
 
   final IconData trailingIcon;
+
+  bool automaticallyImplyLeading;
 
   final double? height;
 

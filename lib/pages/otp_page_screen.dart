@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:verificationsystem/app_export.dart';
@@ -13,6 +15,7 @@ class OtpPageScreen extends StatefulWidget {
 }
 
 class _OtpPageScreenState extends State<OtpPageScreen> {
+  final TextEditingController otpController = TextEditingController();
   String otpCode = "";
 
   @override
@@ -34,7 +37,7 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
                     height: 50,
                   ),
                   Text(
-                    'Enter the OTP code received in your phone number.',
+                    'Enter the OTP code received in your phone number',
                     style: theme.textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -44,6 +47,7 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
                   Pinput(
                     length: 6,
                     showCursor: true,
+                    controller: otpController,
                     defaultPinTheme: PinTheme(
                       width: 60,
                       height: 60,
@@ -58,11 +62,6 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    onSubmitted: (value) {
-                      setState(() {
-                        otpCode = value;
-                      });
-                    },
                   ),
                   SizedBox(
                     height: 20,
@@ -74,7 +73,44 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
               ),
               CustomElevatedButton(
                 text: "Submit OTP",
-                onPressed: () {},
+                onPressed: () {
+                  // check if otp is entered or not
+                  if (otpController.text.isNotEmpty &&
+                      otpController.length == 6) {
+                    print(otpController.text);
+                    otpCode = otpController.text;
+                    RegisterAuth.loginWithOTP(
+                        otp: otpCode,
+                        errorStep: () => ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                "Invalid OTP",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.red,
+                            )),
+                        nextStep: () => onTapSubmitOTP());
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Error"),
+                          content: const Text(
+                              'Please enter OTP that you received through SMS.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
               ),
               const SizedBox(height: 20),
               const Text(
@@ -86,12 +122,17 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
                 ),
               ),
               const SizedBox(height: 15),
-              const Text(
-                "Resend Code",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+              InkWell(
+                onTap: () {
+                  print("Resend code tapped.");
+                },
+                child: Text(
+                  "Resend Code",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
                 ),
               )
             ]),

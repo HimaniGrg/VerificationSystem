@@ -12,10 +12,7 @@ class _DashboardPageScreenState extends State<DashboardPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: _buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -71,4 +68,14 @@ class _DashboardPageScreenState extends State<DashboardPageScreen> {
       ),
     );
   }
+}
+
+/// Section Widget
+PreferredSizeWidget _buildAppBar(BuildContext context) {
+  return CustomAppBar(
+    title: 'Dashboard',
+    leadingIcon: Icons.dashboard,
+    trailingIcon: Icons.person_rounded,
+    automaticallyImplyLeading: false,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class RegisterAuth {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,7 +41,11 @@ class RegisterAuth {
   }
 
   //function to verify OTP and login
-  static Future loginWithOTP({required String otp}) async {
+  static Future loginWithOTP({
+    required String otp,
+    required Function errorStep,
+    required Function nextStep,
+  }) async {
     final cred = PhoneAuthProvider.credential(
         verificationId: verifyId,
         smsCode:
@@ -50,9 +55,9 @@ class RegisterAuth {
       final user = await _auth.signInWithCredential(cred);
       //check if user is signed in or not
       if (user.user != null) {
-        return "Sucsess";
+        nextStep();
       } else {
-        return "error while login with otp";
+        errorStep();
       }
     } on FirebaseAuthException catch (e) {
       return e.message.toString();

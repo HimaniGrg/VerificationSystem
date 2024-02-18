@@ -13,7 +13,7 @@ class RegistrationPageScreen extends StatefulWidget {
 
 class _RegisterState extends State<RegistrationPageScreen> {
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController otpController = TextEditingController();
+  String phoneNumber = "";
 
   Country selectedCountry = Country(
     phoneCode: "977",
@@ -132,7 +132,7 @@ class _RegisterState extends State<RegistrationPageScreen> {
                         phoneController.length == 10) {
                       print(
                           '+${selectedCountry.phoneCode}${phoneController.text}');
-                      String phoneNumber =
+                      phoneNumber =
                           '+${selectedCountry.phoneCode}${phoneController.text}';
 
                       RegisterAuth.sendOTP(
@@ -145,7 +145,7 @@ class _RegisterState extends State<RegistrationPageScreen> {
                                 ),
                                 backgroundColor: Colors.red,
                               )),
-                          nextStep: onTap(context));
+                          nextStep: () => onTap(context));
                     } else {
                       showDialog(
                         context: context,
