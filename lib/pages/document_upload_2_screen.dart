@@ -28,7 +28,7 @@ class DocumentUpload2Screen extends StatelessWidget {
                               activeDotColor: appTheme.blue800,
                               dotColor: appTheme.blueGray100,
                               dotHeight: 5,
-                              dotWidth: 25))),
+                              dotWidth: 30))),
                   SizedBox(height: 30),
                   CustomImageView(
                     imagePath: ImageConstant.imgCitizenshipIcon,
@@ -37,16 +37,16 @@ class DocumentUpload2Screen extends StatelessWidget {
                     alignment: Alignment.center,
                     //margin: EdgeInsets.only(left: 60)
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 28),
                   Container(
                       width: 273,
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(left: 9, right: 16),
-                      child: Text("Upload your citizenship\n(back face)",
+                      child: Text("Upload your citizenship",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleLarge)),
-                  SizedBox(height: 15),
+                  SizedBox(height: 12),
                   Align(
                       alignment: Alignment.center,
                       child: Container(
@@ -77,14 +77,13 @@ class DocumentUpload2Screen extends StatelessWidget {
                           )),
                       buttonStyle: CustomButtonStyles.fillPrimaryTL10,
                       buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary),
-                  SizedBox(height: 60),
+                  SizedBox(height: 50),
                   CustomElevatedButton(
                       text: "Next",
                       margin: EdgeInsets.symmetric(horizontal: 7),
                       onPressed: () {
                         onTapNext(context);
                       }),
-                  SizedBox(height: 5)
                 ]))));
   }
 
@@ -94,6 +93,7 @@ class DocumentUpload2Screen extends StatelessWidget {
       title: 'Verification',
       leadingIcon: Icons.dashboard,
       trailingIcon: Icons.person_rounded,
+      automaticallyImplyLeading: true,
     );
   }
 

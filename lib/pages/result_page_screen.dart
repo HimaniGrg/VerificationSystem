@@ -61,6 +61,7 @@ class ResultPageScreen extends StatelessWidget {
       title: 'Verification',
       leadingIcon: Icons.dashboard,
       trailingIcon: Icons.person_rounded,
+      automaticallyImplyLeading: true,
     );
   }
 

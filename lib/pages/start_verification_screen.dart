@@ -19,7 +19,7 @@ class StartVerificationScreen extends StatelessWidget {
                     .copyWith(borderRadius: BorderRadiusStyle.roundedBorder33),
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   SizedBox(
-                      height: 6,
+                      height: 10,
                       width: 200,
                       child: AnimatedSmoothIndicator(
                           activeIndex: 0,
@@ -29,8 +29,17 @@ class StartVerificationScreen extends StatelessWidget {
                               activeDotColor: appTheme.blue800,
                               dotColor: appTheme.blueGray100,
                               dotHeight: 5,
-                              dotWidth: 25))),
-                  Spacer(),
+                              dotWidth: 30))),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  CustomImageView(
+                    imagePath: ImageConstant.verificationIcon,
+                    height: 150,
+                    width: 150,
+                    alignment: Alignment.center,
+                  ),
+                  SizedBox(height: 30),
                   Container(
                       width: 220,
                       margin: EdgeInsets.only(left: 44, right: 48),
@@ -61,7 +70,7 @@ class StartVerificationScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                               style: theme.textTheme.bodyLarge))),
-                  SizedBox(height: 93),
+                  SizedBox(height: 60),
                   CustomElevatedButton(
                       text: "Start",
                       onPressed: () {

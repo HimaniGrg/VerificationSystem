@@ -4,10 +4,10 @@ class ImageConstant {
   //app icon
   static String appIcon = '$imagePath/app_icon.png';
 
-  static String imgCitizenshipIcon = '$imagePath/img_citizenship_icon.svg';
+  static String imgCitizenshipIcon = '$imagePath/img_citizenship_icon.svg.';
 
   // Start_verification images
-  static String imgMiBarChartAlt = '$imagePath/img_mi_bar_chart_alt.svg';
+  static String verificationIcon = '$imagePath/verification_icon.png';
 
   // Selection page images
   static String imgProgressBar = '$imagePath/img_progress_bar.svg';

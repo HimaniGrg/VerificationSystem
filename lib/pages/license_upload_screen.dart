@@ -13,7 +13,7 @@ class LicenseUploadScreen extends StatelessWidget {
             appBar: _buildAppBar(context), // method called for appbar
             body: Container(
                 //width: 345,
-                margin: EdgeInsets.fromLTRB(7, 1, 7, 9),
+                margin: EdgeInsets.fromLTRB(7, 1, 7, 1),
                 padding: EdgeInsets.symmetric(horizontal: 23, vertical: 42),
                 decoration: AppDecoration.fillOnPrimary
                     .copyWith(borderRadius: BorderRadiusStyle.roundedBorder33),
@@ -29,7 +29,7 @@ class LicenseUploadScreen extends StatelessWidget {
                               activeDotColor: appTheme.blue800,
                               dotColor: appTheme.blueGray100,
                               dotHeight: 5,
-                              dotWidth: 25))),
+                              dotWidth: 30))),
                   SizedBox(height: 30),
                   CustomImageView(
                     imagePath: ImageConstant.imgCitizenshipIcon,
@@ -77,23 +77,24 @@ class LicenseUploadScreen extends StatelessWidget {
                           )),
                       buttonStyle: CustomButtonStyles.fillPrimaryTL10,
                       buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary),
-                  SizedBox(height: 60),
+                  SizedBox(height: 50),
                   CustomElevatedButton(
                       text: "Next",
-                      margin: EdgeInsets.symmetric(horizontal: 7),
+                      //margin: EdgeInsets.symmetric(horizontal: 7),
                       onPressed: () {
                         onTapNext(context);
                       }),
-                  SizedBox(height: 5)
+                  //SizedBox(height: 5)
                 ]))));
   }
 
-  /// Section Widget
+  /// Section Widget for App Bar
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       title: 'Verification',
       leadingIcon: Icons.dashboard,
       trailingIcon: Icons.person_rounded,
+      automaticallyImplyLeading: true,
     );
   }
 
