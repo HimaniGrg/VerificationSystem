@@ -1,91 +1,134 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:verificationsystem/app_export.dart';
+import 'package:verificationsystem/utils/image_picker.dart';
+import 'package:verificationsystem/resources/add_image.dart';
 
-class LicenseUploadScreen extends StatelessWidget {
-  const LicenseUploadScreen({Key? key}) : super(key: key);
+class LicenseUploadScreen extends StatefulWidget {
+  const LicenseUploadScreen({super.key});
+
+  @override
+  State<LicenseUploadScreen> createState() => _LicenseUploadScreenState();
+}
+
+class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
+  Uint8List? _image;
+
+  //function to take image from camera
+  Future<void> takeImage() async {
+    Uint8List imgCamera = await pickImage(ImageSource.camera);
+    _image = imgCamera;
+  }
+
+  // function to upload image from gallery
+  Future<void> selectImage() async {
+    Uint8List imgGallery = await pickImage(ImageSource.gallery);
+    _image = imgGallery;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(context), // method called for appbar
-            body: Container(
-                //width: 345,
-                margin: EdgeInsets.fromLTRB(7, 1, 7, 1),
-                padding: EdgeInsets.symmetric(horizontal: 23, vertical: 42),
-                decoration: AppDecoration.fillOnPrimary
-                    .copyWith(borderRadius: BorderRadiusStyle.roundedBorder33),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  SizedBox(
-                      height: 6,
-                      width: 200,
-                      child: AnimatedSmoothIndicator(
-                          activeIndex: 1,
-                          count: 6,
-                          effect: ScrollingDotsEffect(
-                              spacing: 13,
-                              activeDotColor: appTheme.blue800,
-                              dotColor: appTheme.blueGray100,
-                              dotHeight: 5,
-                              dotWidth: 30))),
-                  SizedBox(height: 30),
-                  CustomImageView(
-                    imagePath: ImageConstant.imgCitizenshipIcon,
-                    height: 150,
-                    width: 150,
-                    alignment: Alignment.center,
-                  ),
-                  SizedBox(height: 30),
-                  Container(
-                      width: 273,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: 9, right: 16),
-                      child: Text("Upload your driving license",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.titleLarge)),
-                  SizedBox(height: 15),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          width: 247,
-                          //margin: EdgeInsets.only(right: 51),
-                          child: Text(
-                              "Upload the clear image of your driving license.",
-                              maxLines: 2,
+            body: SingleChildScrollView(
+                child: Container(
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 0.025 * MediaQuery.of(context).size.width),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 0.06 * MediaQuery.of(context).size.width,
+                        vertical: 42),
+                    decoration: AppDecoration.fillOnPrimary.copyWith(
+                        borderRadius: BorderRadiusStyle.roundedBorder33),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      // page indicator
+                      SizedBox(
+                          height: 6,
+                          width: 200,
+                          child: AnimatedSmoothIndicator(
+                              activeIndex: 1,
+                              count: 6,
+                              effect: ScrollingDotsEffect(
+                                  spacing: 13,
+                                  activeDotColor: appTheme.blue800,
+                                  dotColor: appTheme.blueGray100,
+                                  dotHeight: 5,
+                                  dotWidth: 30))),
+                      SizedBox(height: 30),
+
+                      CustomImageView(
+                        imagePath: ImageConstant.imgCitizenshipIcon,
+                        height: 150,
+                        width: 200,
+                        alignment: Alignment.center,
+                      ),
+                      SizedBox(height: 30),
+
+                      Container(
+                          width: 273,
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(left: 9, right: 16),
+                          child: Text("Upload your driving license",
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.bodyLarge))),
-                  SizedBox(height: 35),
-                  _buildDottedbox(
-                      context), //method called for customized dotted box widget
-                  SizedBox(height: 40),
-                  CustomElevatedButton(
-                      alignment: Alignment.center,
-                      height: 48,
-                      width: 200,
-                      text: "Take a picture",
-                      leftIcon: Container(
-                          margin: EdgeInsets.only(left: 2, right: 5),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgBasilcameraoutline,
-                            height: 32,
-                            width: 32,
-                            color: Colors.white,
-                          )),
-                      buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-                      buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary),
-                  SizedBox(height: 50),
-                  CustomElevatedButton(
-                      text: "Next",
-                      //margin: EdgeInsets.symmetric(horizontal: 7),
-                      onPressed: () {
-                        onTapNext(context);
-                      }),
-                  //SizedBox(height: 5)
-                ]))));
+                              style: theme.textTheme.titleLarge)),
+
+                      SizedBox(height: 15),
+
+                      Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                              width: 247,
+                              //margin: EdgeInsets.only(right: 51),
+                              child: Text(
+                                  "Upload the clear image of your driving license.",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.bodyLarge))),
+                      SizedBox(height: 35),
+
+                      _buildDottedbox(
+                          context), //method called for customized dotted box widget
+
+                      SizedBox(height: 20),
+
+                      // _selectedImg != null
+                      //     ? Image.file(_selectedImg!)
+                      //     : const Text("Image selected",
+                      //         style: TextStyle(
+                      //             color: Color.fromARGB(255, 27, 212, 55))),
+
+                      SizedBox(height: 20),
+
+                      CustomElevatedButton(
+                        alignment: Alignment.center,
+                        height: 48,
+                        width: 250,
+                        text: "   Take a picture",
+                        leftIcon: const Icon(Icons.camera_alt_outlined),
+                        buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                        buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary,
+                        onPressed: () {
+                          takeImage();
+                        },
+                      ),
+
+                      SizedBox(height: 50),
+                      CustomElevatedButton(
+                          text: "Next",
+                          //margin: EdgeInsets.symmetric(horizontal: 7),
+                          onPressed: () {
+                            onTapNext(context);
+                          }),
+                      //SizedBox(height: 5)
+                    ])))));
   }
 
   /// Section Widget for App Bar
@@ -102,7 +145,8 @@ class LicenseUploadScreen extends StatelessWidget {
   Widget _buildDottedbox(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print("dotted bordered box tapped");
+          // print("dotted bordered box tapped");
+          selectImage();
         },
         child: Container(
             alignment: Alignment.center,
@@ -155,6 +199,8 @@ class LicenseUploadScreen extends StatelessWidget {
 
   /// Navigates to the selectionPageScreen when the action is triggered.
   onTapNext(BuildContext context) {
+    uploadImage();
+
     Navigator.pushNamed(context, AppRoutes.documentUpload1Screen);
   }
 }

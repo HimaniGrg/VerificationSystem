@@ -34,7 +34,8 @@ class CustomTextStyles {
   static get titleLargeKameronOnPrimary => GoogleFonts.kameron(
         textStyle: theme.textTheme.headline1!.copyWith(
           color: theme.colorScheme.onPrimary.withOpacity(1),
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
         ),
       );
 }

@@ -3,8 +3,8 @@ class ImageConstant {
   static String imagePath = 'assets/images';
   //app icon
   static String appIcon = '$imagePath/app_icon.png';
-
-  static String imgCitizenshipIcon = '$imagePath/img_citizenship_icon.svg.';
+  // citizenship icon
+  static String imgCitizenshipIcon = '$imagePath/citizenship_icon.png';
 
   // Start_verification images
   static String verificationIcon = '$imagePath/verification_icon.png';
