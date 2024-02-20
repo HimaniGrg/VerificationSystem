@@ -1,13 +1,13 @@
 class ImageConstant {
   // Image folder path
   static String imagePath = 'assets/images';
-  //app icon
-  static String appIcon = '$imagePath/app_icon.png';
-  // citizenship icon
-  static String imgCitizenshipIcon = '$imagePath/citizenship_icon.png';
+  static String appIcon = '$imagePath/app_icon.png'; //app icon
+  static String imgCitizenshipIcon =
+      '$imagePath/citizenship_icon.png'; // citizenship icon
+  static String imgLicenseIcon = '$imagePath/license_icon.png';
 
   // Start_verification images
-  static String verificationIcon = '$imagePath/verification_icon.png';
+  static String verificationIcon = '$imagePath/verification.png';
 
   // Selection page images
   static String imgProgressBar = '$imagePath/img_progress_bar.svg';

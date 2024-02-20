@@ -1,10 +1,102 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:verificationsystem/app_export.dart';
 
-class DocumentUpload2Screen extends StatelessWidget {
-  const DocumentUpload2Screen({Key? key}) : super(key: key);
+class DocumentUpload2Screen extends StatefulWidget {
+  const DocumentUpload2Screen({super.key});
+
+  @override
+  State<DocumentUpload2Screen> createState() => _DocumentUpload2ScreenState();
+}
+
+class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
+  late File _image;
+  bool _isUploading = false;
+  bool _isSelected = false;
+
+  //function to take image from camera
+  Future<void> takeImage() async {
+    var imgCamera = await pickImage(ImageSource.camera);
+    setState(() {
+      _image = imgCamera;
+      _isSelected = true;
+    });
+    uploadImage();
+  }
+
+  // function to upload image from gallery
+  Future<void> selectImage() async {
+    var imgGallery = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = imgGallery;
+      _isSelected = true;
+    });
+    uploadImage();
+  }
+
+  //function to store the image in firestore
+  Future<void> uploadImage() async {
+    //check if image is selected
+    if (_image != null) {
+      StoreImage storeimage = StoreImage(); //instance of class StoreImage
+
+      try {
+        setState(() {
+          _isUploading = true;
+        });
+
+        //save image to the firebase storage and firestore
+        await storeimage.saveImage(
+            documentType: 'citizenship_back', file: _image);
+
+        // Show a success message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Image successfully uploaded!",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.greenAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      } catch (e) {
+        // Show an error message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Error uploading image.",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      } finally {
+        setState(() {
+          _isUploading = false;
+        });
+      }
+    } else {
+      // Show a message indicating that no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Image is not selected!",
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+        ),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.fixed,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +113,7 @@ class DocumentUpload2Screen extends StatelessWidget {
                   SizedBox(
                       height: 6,
                       child: AnimatedSmoothIndicator(
-                          activeIndex: 3,
+                          activeIndex: 2,
                           count: 6,
                           effect: ScrollingDotsEffect(
                               spacing: 13,
@@ -53,7 +145,7 @@ class DocumentUpload2Screen extends StatelessWidget {
                           width: 247,
                           //margin: EdgeInsets.only(right: 51),
                           child: Text(
-                              "Upload the clear image of your citizenship (front face).",
+                              "Upload the clear image of your citizenship (back face).",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
@@ -63,31 +155,37 @@ class DocumentUpload2Screen extends StatelessWidget {
                       context), //method called for customized dotted box widget
                   SizedBox(height: 40),
                   CustomElevatedButton(
-                      alignment: Alignment.center,
-                      height: 48,
-                      width: 200,
-                      text: "Take a picture",
-                      leftIcon: Container(
-                          margin: EdgeInsets.only(left: 2, right: 5),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgBasilcameraoutline,
-                            height: 32,
-                            width: 32,
-                            color: Colors.white,
-                          )),
-                      buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-                      buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary),
+                    alignment: Alignment.center,
+                    height: 48,
+                    width: 200,
+                    text: "Take a picture",
+                    leftIcon: Container(
+                        margin: EdgeInsets.only(left: 2, right: 5),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgBasilcameraoutline,
+                          height: 32,
+                          width: 32,
+                          color: Colors.white,
+                        )),
+                    buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                    buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary,
+                    onPressed: () => takeImage(),
+                  ),
                   SizedBox(height: 50),
                   CustomElevatedButton(
-                      text: "Next",
-                      margin: EdgeInsets.symmetric(horizontal: 7),
-                      onPressed: () {
-                        onTapNext(context);
-                      }),
+                      text: "Verify",
+                      isDisabled: _isUploading,
+                      //margin: EdgeInsets.symmetric(horizontal: 7),'
+                      onPressed: _isUploading
+                          ? null
+                          : () {
+                              //disable the button while uploading
+                              onTapNext(context);
+                            }),
                 ]))));
   }
 
-  /// Section Widget
+  /// Section Widget for App Bar
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       title: 'Verification',
@@ -101,7 +199,8 @@ class DocumentUpload2Screen extends StatelessWidget {
   Widget _buildDottedbox(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print("dotted bordered box tapped");
+          // print("dotted bordered box tapped");
+          selectImage();
         },
         child: Container(
             alignment: Alignment.center,
@@ -154,6 +253,25 @@ class DocumentUpload2Screen extends StatelessWidget {
 
   /// Navigates to the selectionPageScreen when the action is triggered.
   onTapNext(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.processingPageScreen);
+    //check if image is selected or not
+    if (_isSelected) {
+      Navigator.pushNamed(context, AppRoutes.processingPageScreen);
+    } else {
+      // Show a Snackbar indicating that an image needs to be selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please select an image before proceeding.",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.fixed,
+        ),
+      );
+    }
   }
 }

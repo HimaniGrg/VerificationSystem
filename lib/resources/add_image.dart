@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../auth/register_auth.dart';
@@ -35,7 +34,7 @@ class StoreImage {
   }
 
   // function to save image details to Firebase cloud firestore
-  Future<String> saveImage(
+  Future<void> saveImage(
       {required String documentType, required File file}) async {
     try {
       // get download urls after uploading images to storage
@@ -45,7 +44,7 @@ class StoreImage {
         'documentType': documentType,
         'imageUrl': imageUrl,
       });
-      return "Image saved";
+      print("image saved");
     } catch (e) {
       // Handle any errors that occur during the save process
       print("Error saving image: $e");

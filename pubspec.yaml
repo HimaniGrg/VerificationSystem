@@ -16,10 +16,8 @@ dependencies:
   country_picker: ^2.0.20
   pinput: ^3.0.1
   image_picker: ^0.8.4       
-  pin_code_fields: ^7.3.0  
   cached_network_image: ^3.0.0
   flutter_svg: ^2.0.5
-  intl: ^0.17.0   
   smooth_page_indicator: ^1.1.0
   dotted_border: ^2.1.0
   google_fonts: ^2.0.0
@@ -46,6 +44,5 @@ flutter:
 
   assets:
    - assets/images/
-   - assets/images/app_icon.png
 
  

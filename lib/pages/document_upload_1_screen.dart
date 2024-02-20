@@ -1,10 +1,91 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:verificationsystem/app_export.dart';
 
-class DocumentUpload1Screen extends StatelessWidget {
+class DocumentUpload1Screen extends StatefulWidget {
   const DocumentUpload1Screen({Key? key}) : super(key: key);
+
+  @override
+  State<DocumentUpload1Screen> createState() => _DocumentUpload1ScreenState();
+}
+
+class _DocumentUpload1ScreenState extends State<DocumentUpload1Screen> {
+  late File _image;
+  bool _isUploading = false;
+  bool _isSelected = false;
+
+  //function to take image from camera
+  Future<void> takeImage() async {
+    var imgCamera = await pickImage(ImageSource.camera);
+    setState(() {
+      _image = imgCamera;
+      _isSelected = true;
+    });
+    uploadImage();
+  }
+
+  // function to upload image from gallery
+  Future<void> selectImage() async {
+    var imgGallery = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = imgGallery;
+      _isSelected = true;
+    });
+    uploadImage();
+  }
+
+  //function to store the image in firestore
+  Future<void> uploadImage() async {
+    //check if image is selected
+    if (_image != null) {
+      StoreImage storeimage = StoreImage(); //instance of class StoreImage
+
+      try {
+        setState(() {
+          _isUploading = true;
+        });
+
+        //save image to the firebase storage and firestore
+        await storeimage.saveImage(
+            documentType: 'citizenship_front', file: _image);
+
+        // Show a success message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Image successfully uploaded!",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.greenAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      } catch (e) {
+        // Show an error message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Error uploading image.",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      } finally {
+        setState(() {
+          _isUploading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,27 +144,33 @@ class DocumentUpload1Screen extends StatelessWidget {
                       context), //method called for customized dotted box widget
                   SizedBox(height: 40),
                   CustomElevatedButton(
-                      alignment: Alignment.center,
-                      height: 48,
-                      width: 200,
-                      text: "Take a picture",
-                      leftIcon: Container(
-                          margin: EdgeInsets.only(left: 2, right: 5),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgBasilcameraoutline,
-                            height: 32,
-                            width: 32,
-                            color: Colors.white,
-                          )),
-                      buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-                      buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary),
+                    alignment: Alignment.center,
+                    height: 48,
+                    width: 200,
+                    text: "Take a picture",
+                    leftIcon: Container(
+                        margin: EdgeInsets.only(left: 2, right: 5),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgBasilcameraoutline,
+                          height: 32,
+                          width: 32,
+                          color: Colors.white,
+                        )),
+                    buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                    buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary,
+                    onPressed: () => takeImage(),
+                  ),
                   SizedBox(height: 50),
                   CustomElevatedButton(
                       text: "Next",
-                      margin: EdgeInsets.symmetric(horizontal: 7),
-                      onPressed: () {
-                        onTapNext(context);
-                      }),
+                      isDisabled: _isUploading,
+                      //margin: EdgeInsets.symmetric(horizontal: 7),'
+                      onPressed: _isUploading
+                          ? null
+                          : () {
+                              //disable the button while uploading
+                              onTapNext(context);
+                            }),
                 ]))));
   }
 
@@ -101,7 +188,8 @@ class DocumentUpload1Screen extends StatelessWidget {
   Widget _buildDottedbox(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print("dotted bordered box tapped");
+          // print("dotted bordered box tapped");
+          selectImage();
         },
         child: Container(
             alignment: Alignment.center,
@@ -154,6 +242,19 @@ class DocumentUpload1Screen extends StatelessWidget {
 
   /// Navigates to the selectionPageScreen when the action is triggered.
   onTapNext(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.documentUpload2Screen);
+    if (_isSelected) {
+      Navigator.pushNamed(context, AppRoutes.documentUpload2Screen);
+    } else {
+      // Show a message indicating that no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Image is not selected!",
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+        ),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.fixed,
+      ));
+    }
   }
 }
