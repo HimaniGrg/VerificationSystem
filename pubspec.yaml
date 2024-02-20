@@ -28,6 +28,8 @@ dependencies:
   firebase_auth: ^4.15.3
   cloud_firestore: ^4.13.1
   firebase_storage: ^11.5.4
+  firebase_app_check: ^0.2.1+8
+  path: ^1.8.2
   #provider: ^5.0.0
   #firebase_messaging
 

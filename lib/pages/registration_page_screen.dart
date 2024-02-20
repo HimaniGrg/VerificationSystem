@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:verificationsystem/app_export.dart';
-import 'package:verificationsystem/auth/register_auth.dart';
 
 class RegistrationPageScreen extends StatefulWidget {
   const RegistrationPageScreen({Key? key}) : super(key: key);

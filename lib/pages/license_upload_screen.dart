@@ -1,13 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:verificationsystem/app_export.dart';
-import 'package:verificationsystem/utils/image_picker.dart';
-import 'package:verificationsystem/resources/add_image.dart';
 
 class LicenseUploadScreen extends StatefulWidget {
   const LicenseUploadScreen({super.key});
@@ -17,18 +14,77 @@ class LicenseUploadScreen extends StatefulWidget {
 }
 
 class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
-  Uint8List? _image;
+  late File _image;
 
   //function to take image from camera
   Future<void> takeImage() async {
-    Uint8List imgCamera = await pickImage(ImageSource.camera);
+    var imgCamera = await pickImage(ImageSource.camera);
     _image = imgCamera;
+    uploadImage();
   }
 
   // function to upload image from gallery
   Future<void> selectImage() async {
-    Uint8List imgGallery = await pickImage(ImageSource.gallery);
+    var imgGallery = await pickImage(ImageSource.gallery);
+
     _image = imgGallery;
+    print("Image path $_image");
+    uploadImage();
+  }
+
+  //function to store the image in firestore
+  Future<void> uploadImage() async {
+    //check if image is selected
+    if (_image != null) {
+      StoreImage storeimage = StoreImage(); //instance of class StoreImage
+
+      try {
+        //save image to the firebase storage and firestore
+        String response =
+            //await StoreImage().uploadImagetoStorage("license", _image);
+            await storeimage.saveImage(documentType: 'license', file: _image);
+        // print(response);
+
+        // Show a success message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Image successfully uploaded!",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.greenAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      } catch (e) {
+        // Show an error message using a SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Error uploading image.",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ));
+      }
+    } else {
+      // Show a message indicating that no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Image is not selected!",
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+        ),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.fixed,
+      ));
+    }
   }
 
   @override
@@ -200,7 +256,6 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
   /// Navigates to the selectionPageScreen when the action is triggered.
   onTapNext(BuildContext context) {
     uploadImage();
-
     Navigator.pushNamed(context, AppRoutes.documentUpload1Screen);
   }
 }

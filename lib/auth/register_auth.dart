@@ -78,4 +78,22 @@ class RegisterAuth {
     var user = _auth.currentUser;
     return user != null; // if there is user it return true else false
   }
+
+  //retrieve current user id
+  Future<String> getCurrentUserId() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        String userId = user.uid;
+        return userId;
+      } else {
+        // If user is not signed in, handle accordingly
+        return "User not signed in.";
+      }
+    } catch (e) {
+      // Handle any potential errors
+      print("Error obtaining user ID: $e");
+      return "Failed to obtain user ID.";
+    }
+  }
 }

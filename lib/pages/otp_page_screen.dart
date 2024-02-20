@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:verificationsystem/app_export.dart';
-import 'package:verificationsystem/auth/register_auth.dart';
 
 class OtpPageScreen extends StatefulWidget {
   const OtpPageScreen({

@@ -27,3 +27,10 @@ export 'package:verificationsystem/widgets/app_bar/custom_appbar.dart';
 
 //utilis
 export 'package:verificationsystem/utils/image_constant.dart';
+export 'package:verificationsystem/utils/image_picker.dart';
+
+//auth
+export 'package:verificationsystem/auth/register_auth.dart';
+
+//resources
+export 'package:verificationsystem/resources/add_image.dart';
