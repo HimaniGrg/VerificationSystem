@@ -178,16 +178,22 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
                     onPressed: () => takeImage(),
                   ),
                   SizedBox(height: 50),
-                  CustomElevatedButton(
-                      text: "Verify",
-                      isDisabled: _isUploading,
-                      //margin: EdgeInsets.symmetric(horizontal: 7),'
-                      onPressed: _isUploading
-                          ? null
-                          : () {
-                              //disable the button while uploading
-                              onTapNext(context);
-                            }),
+                  Container(
+                    height: 50,
+                    // width: 150,
+                    child: CustomElevatedButtonIndicator(
+                        alignment: Alignment.center,
+                        text: "Next",
+                        height: 50,
+                        isDisabled: _isUploading,
+                        //margin: EdgeInsets.symmetric(horizontal: 7),'
+                        onPressed: _isUploading
+                            ? null
+                            : () {
+                                //disable the button while uploading
+                                onTapNext(context);
+                              }),
+                  )
                 ]))));
   }
 

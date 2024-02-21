@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:verificationsystem/app_export.dart';
 
-class CustomElevatedButton extends BaseButton {
-  const CustomElevatedButton({
+class CustomElevatedButtonIndicator extends BaseButton {
+  const CustomElevatedButtonIndicator({
     Key? key,
     this.decoration,
     this.leftIcon,
@@ -44,27 +44,41 @@ class CustomElevatedButton extends BaseButton {
         : buildElevatedButtonWidget;
   }
 
-  Widget get buildElevatedButtonWidget => Container(
-        height: this.height ?? 54,
-        width: this.width ?? double.maxFinite,
-        margin: margin,
-        decoration: decoration,
-        child: ElevatedButton(
+  Widget get buildElevatedButtonWidget => Stack(children: [
+        Container(
+          height: this.height,
+          width: this.width,
+          margin: margin,
+          decoration: decoration,
+        ),
+        ElevatedButton(
           style: buttonStyle,
           onPressed: isDisabled ?? false ? null : onPressed ?? () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               leftIcon ?? const SizedBox.shrink(),
-              Text(
-                text,
-                style: buttonTextStyle ??
-                    CustomTextStyles.titleLargeKameronOnPrimary,
+              Expanded(
+                child: Center(
+                  child: Text(
+                    text,
+                    style: buttonTextStyle ??
+                        CustomTextStyles.titleLargeKameronOnPrimary,
+                  ),
+                ),
               ),
               rightIcon ?? const SizedBox.shrink(),
             ],
           ),
         ),
-      );
+        if (isDisabled ?? false)
+          const Positioned(
+            child: Center(
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 7, 125, 221))),
+            ),
+          ),
+      ]);
 }

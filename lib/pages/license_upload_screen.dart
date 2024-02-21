@@ -169,7 +169,7 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
                           CustomElevatedButton(
                             alignment: Alignment.center,
                             height: 48,
-                            width: 250,
+                            width: 200,
                             text: "Take a picture",
                             leftIcon: Container(
                                 margin: EdgeInsets.only(left: 2, right: 5),
@@ -183,22 +183,26 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
                             buttonStyle: CustomButtonStyles.fillPrimaryTL10,
                             buttonTextStyle:
                                 CustomTextStyles.bodyLargeOnPrimary,
-                            onPressed: () {
-                              takeImage();
-                            },
+                            onPressed: () => takeImage(),
                           ),
 
                           SizedBox(height: 50),
-                          CustomElevatedButton(
-                              text: "Next",
-                              isDisabled: _isUploading,
-                              //margin: EdgeInsets.symmetric(horizontal: 7),'
-                              onPressed: _isUploading
-                                  ? null
-                                  : () {
-                                      //disable the button while uploading
-                                      onTapNext(context);
-                                    }),
+                          Container(
+                            height: 50,
+                            // width: 150,
+                            child: CustomElevatedButtonIndicator(
+                                alignment: Alignment.center,
+                                text: "Next",
+                                height: 50,
+                                isDisabled: _isUploading,
+                                //margin: EdgeInsets.symmetric(horizontal: 7),'
+                                onPressed: _isUploading
+                                    ? null
+                                    : () {
+                                        //disable the button while uploading
+                                        onTapNext(context);
+                                      }),
+                          )
                         ]))))));
   }
 

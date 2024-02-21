@@ -20,6 +20,7 @@ export 'package:verificationsystem/theme/custom_button_style.dart';
 //widgets
 export 'package:verificationsystem/widgets/base_button.dart';
 export 'package:verificationsystem/widgets/custom_elevated_button.dart';
+export 'package:verificationsystem/widgets/custom_elevated_button_indicator.dart';
 export 'package:verificationsystem/widgets/custom_image_view.dart';
 
 export 'package:verificationsystem/widgets/app_bar/appbar_image.dart';
