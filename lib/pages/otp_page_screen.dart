@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:verificationsystem/pages/dashboard_page_screen.dart';
 import 'package:verificationsystem/app_export.dart';
 
 class OtpPageScreen extends StatefulWidget {
@@ -140,7 +141,6 @@ class _OtpPageScreenState extends State<OtpPageScreen> {
   }
 
   onTapSubmitOTP() {
-    //await widget.authOperation.signInWithPhoneNumber(enteredOtp, widget.verificationId);
-    Navigator.pushNamed(context, AppRoutes.dashboardPageScreen);
+    AppRoutes.pushReplacement(context, AppRoutes.dashboardPageScreen);
   }
 }

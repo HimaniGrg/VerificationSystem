@@ -34,4 +34,10 @@ class AppRoutes {
     processingPageScreen: (context) => const ProcessingPageScreen(),
     resultPageScreen: (context) => const ResultPageScreen()
   };
+
+  // function for replace navigation
+  static void pushReplacement(BuildContext context, String routeName) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: routes[routeName]!));
+  }
 }

@@ -20,8 +20,8 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
   //function to take image from camera
   Future<void> takeImage() async {
     var imgCamera = await pickImage(ImageSource.camera);
+    _image = imgCamera;
     setState(() {
-      _image = imgCamera;
       _isSelected = true;
     });
     uploadImage();
@@ -30,8 +30,8 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
   // function to upload image from gallery
   Future<void> selectImage() async {
     var imgGallery = await pickImage(ImageSource.gallery);
+    _image = imgGallery;
     setState(() {
-      _image = imgGallery;
       _isSelected = true;
     });
     uploadImage();
@@ -49,8 +49,8 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
         });
 
         //save image to the firebase storage and firestore
-        await storeimage.saveImage(
-            documentType: 'citizenship_back', file: _image);
+        await storeimage.uploadImagetoStorage(
+            documentType: 'citizenship_back', imgfile: _image);
 
         // Show a success message using a SnackBar
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -64,6 +64,7 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
           ),
           backgroundColor: Colors.greenAccent,
           behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
         ));
       } catch (e) {
         // Show an error message using a SnackBar
@@ -78,6 +79,7 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
           ),
           backgroundColor: Colors.redAccent,
           behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
         ));
       } finally {
         setState(() {
@@ -94,13 +96,17 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
         ),
         backgroundColor: Colors.redAccent,
         behavior: SnackBarBehavior.fixed,
+        duration: Duration(seconds: 2),
       ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return WillPopScope(
+        onWillPop: () async {
+          return showDiscardDialog(context);
+        },
         child: Scaffold(
             appBar: _buildAppBar(context), // method called for appbar
             body: Container(
@@ -191,7 +197,7 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
       title: 'Verification',
       leadingIcon: Icons.dashboard,
       trailingIcon: Icons.person_rounded,
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: false,
     );
   }
 
@@ -255,13 +261,13 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
   onTapNext(BuildContext context) {
     //check if image is selected or not
     if (_isSelected) {
-      Navigator.pushNamed(context, AppRoutes.processingPageScreen);
+      AppRoutes.pushReplacement(context, AppRoutes.processingPageScreen);
     } else {
       // Show a Snackbar indicating that an image needs to be selected
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            "Please select an image before proceeding.",
+            "Image is not selected!",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -270,8 +276,42 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
           ),
           backgroundColor: Colors.redAccent,
           behavior: SnackBarBehavior.fixed,
+          duration: Duration(seconds: 2),
         ),
       );
     }
+  }
+
+  // Method to show a confirmation dialog before discarding changes
+  Future<bool> showDiscardDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Stop verification'),
+          content:
+              Text('Are you sure you want to stop the verification proccess?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Discard changes
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Stay on the screen
+              },
+              child: Text('No, keep verifying'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

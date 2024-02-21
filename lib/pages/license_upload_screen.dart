@@ -20,8 +20,8 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
   //function to take image from camera
   Future<void> takeImage() async {
     var imgCamera = await pickImage(ImageSource.camera);
+    _image = imgCamera;
     setState(() {
-      _image = imgCamera;
       _isSelected = true;
     });
     uploadImage();
@@ -30,8 +30,8 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
   // function to upload image from gallery
   Future<void> selectImage() async {
     var imgGallery = await pickImage(ImageSource.gallery);
+    _image = imgGallery;
     setState(() {
-      _image = imgGallery;
       _isSelected = true;
     });
     uploadImage();
@@ -49,7 +49,8 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
         });
 
         //save image to the firebase storage and firestore
-        await storeimage.saveImage(documentType: 'license', file: _image);
+        await storeimage.uploadImagetoStorage(
+            documentType: 'license', imgfile: _image);
 
         // Show a success message using a SnackBar
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -63,6 +64,7 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
           ),
           backgroundColor: Colors.greenAccent,
           behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
         ));
       } catch (e) {
         // Show an error message using a SnackBar
@@ -77,6 +79,7 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
           ),
           backgroundColor: Colors.redAccent,
           behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
         ));
       } finally {
         setState(() {
@@ -88,107 +91,116 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            appBar: _buildAppBar(context), // method called for appbar
-            body: SingleChildScrollView(
-                child: Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 0.025 * MediaQuery.of(context).size.width),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 0.06 * MediaQuery.of(context).size.width,
-                        vertical: 42),
-                    decoration: AppDecoration.fillOnPrimary.copyWith(
-                        borderRadius: BorderRadiusStyle.roundedBorder33),
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      // page indicator
-                      SizedBox(
-                          height: 6,
-                          width: 200,
-                          child: AnimatedSmoothIndicator(
-                              activeIndex: 1,
-                              count: 6,
-                              effect: ScrollingDotsEffect(
-                                  spacing: 13,
-                                  activeDotColor: appTheme.blue800,
-                                  dotColor: appTheme.blueGray100,
-                                  dotHeight: 5,
-                                  dotWidth: 30))),
-                      SizedBox(height: 30),
+    return WillPopScope(
+        onWillPop: () async {
+          return await showDiscardDialog(context);
+        },
+        child: SafeArea(
+            child: Scaffold(
+                appBar: _buildAppBar(context), // method called for appbar
+                body: SingleChildScrollView(
+                    child: Container(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                0.025 * MediaQuery.of(context).size.width),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                0.06 * MediaQuery.of(context).size.width,
+                            vertical: 42),
+                        decoration: AppDecoration.fillOnPrimary.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder33),
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          // page indicator
+                          SizedBox(
+                              height: 6,
+                              width: 200,
+                              child: AnimatedSmoothIndicator(
+                                  activeIndex: 1,
+                                  count: 6,
+                                  effect: ScrollingDotsEffect(
+                                      spacing: 13,
+                                      activeDotColor: appTheme.blue800,
+                                      dotColor: appTheme.blueGray100,
+                                      dotHeight: 5,
+                                      dotWidth: 30))),
+                          SizedBox(height: 30),
 
-                      CustomImageView(
-                        imagePath: ImageConstant.imgLicenseIcon,
-                        height: 160,
-                        width: 200,
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(height: 30),
+                          CustomImageView(
+                            imagePath: ImageConstant.imgLicenseIcon,
+                            height: 160,
+                            width: 200,
+                            alignment: Alignment.center,
+                          ),
+                          SizedBox(height: 30),
 
-                      Container(
-                          width: 273,
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(left: 9, right: 16),
-                          child: Text("Upload your driving license",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.titleLarge)),
-
-                      SizedBox(height: 15),
-
-                      Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                              width: 247,
-                              //margin: EdgeInsets.only(right: 51),
-                              child: Text(
-                                  "Upload the clear image of your driving license.",
-                                  maxLines: 2,
+                          Container(
+                              width: 273,
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(left: 9, right: 16),
+                              child: Text("Upload your driving license",
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyLarge))),
-                      SizedBox(height: 35),
+                                  style: theme.textTheme.titleLarge)),
 
-                      _buildDottedbox(
-                          context), //method called for customized dotted box widget
+                          SizedBox(height: 15),
 
-                      SizedBox(height: 20),
+                          Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  width: 247,
+                                  //margin: EdgeInsets.only(right: 51),
+                                  child: Text(
+                                      "Upload the clear image of your driving license.",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: theme.textTheme.bodyLarge))),
+                          SizedBox(height: 35),
 
-                      SizedBox(height: 20),
+                          _buildDottedbox(
+                              context), //method called for customized dotted box widget
 
-                      CustomElevatedButton(
-                        alignment: Alignment.center,
-                        height: 48,
-                        width: 250,
-                        text: "Take a picture",
-                        leftIcon: Container(
-                            margin: EdgeInsets.only(left: 2, right: 5),
-                            child: CustomImageView(
-                              imagePath: ImageConstant.imgBasilcameraoutline,
-                              height: 32,
-                              width: 32,
-                              color: Colors.white,
-                            )),
-                        buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-                        buttonTextStyle: CustomTextStyles.bodyLargeOnPrimary,
-                        onPressed: () {
-                          takeImage();
-                        },
-                      ),
+                          SizedBox(height: 20),
 
-                      SizedBox(height: 50),
-                      CustomElevatedButton(
-                          text: "Next",
-                          isDisabled: _isUploading,
-                          //margin: EdgeInsets.symmetric(horizontal: 7),'
-                          onPressed: _isUploading
-                              ? null
-                              : () {
-                                  //disable the button while uploading
-                                  onTapNext(context);
-                                }),
-                      //SizedBox(height: 5)
-                    ])))));
+                          SizedBox(height: 20),
+
+                          CustomElevatedButton(
+                            alignment: Alignment.center,
+                            height: 48,
+                            width: 250,
+                            text: "Take a picture",
+                            leftIcon: Container(
+                                margin: EdgeInsets.only(left: 2, right: 5),
+                                child: CustomImageView(
+                                  imagePath:
+                                      ImageConstant.imgBasilcameraoutline,
+                                  height: 32,
+                                  width: 32,
+                                  color: Colors.white,
+                                )),
+                            buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                            buttonTextStyle:
+                                CustomTextStyles.bodyLargeOnPrimary,
+                            onPressed: () {
+                              takeImage();
+                            },
+                          ),
+
+                          SizedBox(height: 50),
+                          CustomElevatedButton(
+                              text: "Next",
+                              isDisabled: _isUploading,
+                              //margin: EdgeInsets.symmetric(horizontal: 7),'
+                              onPressed: _isUploading
+                                  ? null
+                                  : () {
+                                      //disable the button while uploading
+                                      onTapNext(context);
+                                    }),
+                          //SizedBox(height: 5)
+                        ]))))));
   }
 
   /// Section Widget for App Bar
@@ -197,7 +209,7 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
       title: 'Verification',
       leadingIcon: Icons.dashboard,
       trailingIcon: Icons.person_rounded,
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: false,
     );
   }
 
@@ -260,8 +272,7 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
   // Navigates to the selectionPageScreen when the action is triggered.
   void onTapNext(BuildContext context) {
     if (_isSelected) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => DocumentUpload1Screen()));
+      AppRoutes.pushReplacement(context, AppRoutes.documentUpload1Screen);
     } else {
       // Show a message indicating that no image is selected
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -272,7 +283,39 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
         ),
         backgroundColor: Colors.redAccent,
         behavior: SnackBarBehavior.fixed,
+        duration: Duration(seconds: 2),
       ));
     }
+  }
+
+  // Method to show a confirmation dialog before discarding changes
+  Future<bool> showDiscardDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Stop verification'),
+          content:
+              Text('Are you sure you want to stop the verification proccess?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Discard changes
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(color: Colors.redAccent),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Stay on the screen
+              },
+              child: Text('No, keep verifying'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

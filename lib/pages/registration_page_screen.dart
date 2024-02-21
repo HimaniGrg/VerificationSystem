@@ -177,6 +177,6 @@ class _RegisterState extends State<RegistrationPageScreen> {
   }
 
   onTap(BuildContext context) async {
-    Navigator.pushNamed(context, AppRoutes.otpPageScreen);
+    AppRoutes.pushReplacement(context, AppRoutes.otpPageScreen);
   }
 }

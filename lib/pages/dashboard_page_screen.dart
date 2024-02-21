@@ -75,7 +75,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
   return CustomAppBar(
     title: 'Dashboard',
     leadingIcon: Icons.dashboard,
-    trailingIcon: Icons.person_rounded,
+    trailingIcon: Icons.circle_notifications_rounded,
     automaticallyImplyLeading: false,
   );
 }
