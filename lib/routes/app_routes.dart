@@ -20,6 +20,8 @@ class AppRoutes {
 
   static const String processingPageScreen = '/processing_page_screen';
 
+  static const String extractionResultScreen = '/extraction_result_screen';
+
   static const String resultPageScreen = '/result_page_screen';
 
   static Map<String, WidgetBuilder> routes = {

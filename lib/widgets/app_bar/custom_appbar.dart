@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: Icon(leadingIcon),
             onPressed: () {
-              // Handle left icon tap
+              AppRoutes.pushReplacement(context, AppRoutes.dashboardPageScreen);
             },
           ),
           Text(title),

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:verificationsystem/resources/save_image.dart';
-import '../auth/register_auth.dart';
+import 'package:verificationsystem/app_export.dart';
 import 'package:path/path.dart';
 
 final FirebaseStorage _storage = FirebaseStorage.instance;

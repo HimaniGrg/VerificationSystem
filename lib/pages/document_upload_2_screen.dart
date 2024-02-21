@@ -119,7 +119,7 @@ class _DocumentUpload2ScreenState extends State<DocumentUpload2Screen> {
                   SizedBox(
                       height: 6,
                       child: AnimatedSmoothIndicator(
-                          activeIndex: 2,
+                          activeIndex: 3,
                           count: 6,
                           effect: ScrollingDotsEffect(
                               spacing: 13,
