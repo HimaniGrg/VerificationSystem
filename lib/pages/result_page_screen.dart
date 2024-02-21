@@ -73,7 +73,7 @@ class ResultPageScreen extends StatelessWidget {
             .copyWith(borderRadius: BorderRadiusStyle.roundedBorder42),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           CustomImageView(
-              imagePath: ImageConstant.imgCheckmark,
+              imagePath: ImageConstant.imageNotFound,
               height: 60,
               width: 60,
               alignment: Alignment.center,

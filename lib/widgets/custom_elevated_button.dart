@@ -44,12 +44,14 @@ class CustomElevatedButton extends BaseButton {
         : buildElevatedButtonWidget;
   }
 
-  Widget get buildElevatedButtonWidget => Container(
-        height: this.height ?? 54,
-        width: this.width ?? double.maxFinite,
-        margin: margin,
-        decoration: decoration,
-        child: ElevatedButton(
+  Widget get buildElevatedButtonWidget => Stack(children: [
+        Container(
+          height: this.height ?? 54,
+          width: this.width ?? double.maxFinite,
+          margin: margin,
+          decoration: decoration,
+        ),
+        ElevatedButton(
           style: buttonStyle,
           onPressed: isDisabled ?? false ? null : onPressed ?? () {},
           child: Row(
@@ -66,5 +68,12 @@ class CustomElevatedButton extends BaseButton {
             ],
           ),
         ),
-      );
+        if (isDisabled ?? false)
+          const Positioned(
+            child: Center(
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
+            ),
+          ),
+      ]);
 }

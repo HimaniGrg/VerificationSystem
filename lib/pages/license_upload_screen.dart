@@ -199,7 +199,6 @@ class _LicenseUploadScreenState extends State<LicenseUploadScreen> {
                                       //disable the button while uploading
                                       onTapNext(context);
                                     }),
-                          //SizedBox(height: 5)
                         ]))))));
   }
 

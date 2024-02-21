@@ -70,7 +70,7 @@ class ProcessingPageScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.titleMedium))),
                     CustomImageView(
-                        imagePath: ImageConstant.imgCarbonProgressBar,
+                        imagePath: ImageConstant.imageNotFound,
                         height: 119,
                         width: 217,
                         alignment: Alignment.center)

@@ -1,29 +1,15 @@
 class ImageConstant {
-  // Image folder path
-  static String imagePath = 'assets/images';
+  static String imagePath = 'assets/images'; // Image folder path
   static String appIcon = '$imagePath/app_icon.png'; //app icon
+
   static String imgCitizenshipIcon =
       '$imagePath/citizenship_icon.png'; // citizenship icon
+
   static String imgLicenseIcon = '$imagePath/license_icon.png';
 
-  // Start_verification images
   static String verificationIcon = '$imagePath/verification.png';
 
-  // Selection page images
-  static String imgProgressBar = '$imagePath/img_progress_bar.svg';
-
-  static String imgVector = '$imagePath/img_vector.svg';
-
-  // Processing Page images
-  static String imgCarbonProgressBar = '$imagePath/img_carbon_progress_bar.svg';
-
-  // Result_page images
-  static String imgCheckmark = '$imagePath/img_checkmark.svg';
-
-  // Common images
-  static String imgLock = '$imagePath/img_lock.svg';
-
-  static String imgPreviousPage = '$imagePath/img_previous_page.svg';
+  //static String imgVector = '$imagePath/img_vector.svg';
 
   static String imgSolarGalleryLinear =
       '$imagePath/img_solar_gallery_linear.svg';
