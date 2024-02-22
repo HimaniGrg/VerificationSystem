@@ -54,10 +54,6 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                     // print(
                     //     "${details.citizenshipBack} \n Citizenship_front: ${details.citizenshipFront} \n License: ${details.license}");
                     details.TextToMapFromCitizenship();
-
-                    // for (String dT in data.keys) {
-                    //   print(dT);
-                    // }
                     return SingleChildScrollView(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.95,
@@ -89,6 +85,28 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                           dotHeight: 5,
                                           dotWidth: 30))),
                               SizedBox(height: 30),
+                              Container(
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                    Text(
+                                      'Extracted Information',
+                                      style: TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "Your documents are verified based on these extracted data.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  ])),
+                              SizedBox(height: 20),
                               Row(children: [
                                 Container(
                                   height: 150,
@@ -122,40 +140,40 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                 )
                               ]),
                               SizedBox(height: 10),
-                              Row(children: [
-                                Container(
-                                  height: 150,
-                                  width: 120,
-                                  color: Colors.grey[300],
-                                  child: textExtraction
-                                              .imageUrls['citizenship_front'] ==
-                                          null
-                                      ? Icon(
-                                          Icons.image,
-                                          size: 100,
-                                          color: Colors
-                                              .red, // Add a color for visibility
-                                        )
-                                      : Image.network(
-                                          textExtraction
-                                              .imageUrls['citizenship_front']!,
-                                          height: 300,
-                                          width: 300,
-                                          fit: BoxFit.fill,
-                                        ),
-                                ),
-                                SizedBox(width: 10),
-                                // Display text on the right side
-                                Container(
-                                  child: Text(
-                                    '${data['citizenship_front']}',
-                                    maxLines: 6,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black),
-                                  ),
-                                )
-                              ]),
+                              // Row(children: [
+                              //   Container(
+                              //     height: 150,
+                              //     width: 120,
+                              //     color: Colors.grey[300],
+                              //     child: textExtraction
+                              //                 .imageUrls['citizenship_front'] ==
+                              //             null
+                              //         ? Icon(
+                              //             Icons.image,
+                              //             size: 100,
+                              //             color: Colors
+                              //                 .red, // Add a color for visibility
+                              //           )
+                              //         : Image.network(
+                              //             textExtraction
+                              //                 .imageUrls['citizenship_front']!,
+                              //             height: 300,
+                              //             width: 300,
+                              //             fit: BoxFit.fill,
+                              //           ),
+                              //   ),
+                              //   SizedBox(width: 10),
+                              //   // Display text on the right side
+                              //   Container(
+                              //     child: Text(
+                              //       '${data['citizenship_front']}',
+                              //       maxLines: 6,
+                              //       overflow: TextOverflow.ellipsis,
+                              //       style: TextStyle(
+                              //           fontSize: 16, color: Colors.black),
+                              //     ),
+                              //   )
+                              // ]),
                               const SizedBox(height: 10),
 
                               Row(children: [
@@ -183,12 +201,14 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                 SizedBox(width: 10),
                                 // Display text on the right side
                                 Container(
-                                  child: Text(
-                                    '${data['citizenship_back']}',
+                                  child:
+                                      // Display extracted data
+                                      Text(
+                                    "Name: ${details.TextFromCitizenship['Name']}\nSex: ${details.TextFromCitizenship['Sex']}\nDOB: ${details.TextFromCitizenship['Date of Birth']}\nCitizenship No.: \n${details.TextFromCitizenship['Citizenship No.']}",
                                     maxLines: 6,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontSize: 16, color: Colors.black),
+                                        fontSize: 17, color: Colors.black),
                                   ),
                                 )
                               ]),
@@ -199,7 +219,7 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                 // width: 150,
                                 child: CustomElevatedButtonIndicator(
                                     alignment: Alignment.center,
-                                    text: "Next",
+                                    text: "Verify",
                                     height: 50,
                                     onPressed: () {
                                       //disable the button while uploading

@@ -42,5 +42,6 @@ class StartingPageScreen extends StatelessWidget {
   /// Navigates to the registrationPageScreen when the action is triggered.
   onTapGetStarted(BuildContext context) {
     AppRoutes.pushReplacement(context, AppRoutes.registrationPageScreen);
+    // Navigator.pushNamed(context, AppRoutes.processingPageScreen);
   }
 }

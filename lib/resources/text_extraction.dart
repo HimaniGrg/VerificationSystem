@@ -19,7 +19,7 @@ class TextExtraction {
       // Iterate through image URLs
       for (String documentType in imageUrls.keys) {
         String imageUrl = imageUrls[documentType]!;
-        print(imageUrl);
+        // print(imageUrl);
 
         // Download the image from the URL
         File imageFile = await downloadImage(imageUrl);
@@ -38,6 +38,8 @@ class TextExtraction {
 
       // print(
       //     "Citizenship_back: ${extractedData['citizenship_back']} \n Citizenship_front: ${extractedData['citizenship_front']} \n License: ${extractedData['license']}");
+      print("Extraction complete!");
+      print(extractedData.entries);
       return extractedData;
     } catch (e) {
       throw ('Error extracting text: $e');
@@ -54,9 +56,9 @@ class TextExtraction {
       // Check if the document exists
       if (documentSnapshot.exists) {
         imageUrls = {
+          'license': documentSnapshot['license'],
           'citizenship_back': documentSnapshot['citizenship_back'],
           'citizenship_front': documentSnapshot['citizenship_front'],
-          'license': documentSnapshot['license'],
         };
 
         //print("${imageUrls['citizenship_back']} \n ${imageUrls['citizenship_front']} \n ${imageUrls['license']}");
