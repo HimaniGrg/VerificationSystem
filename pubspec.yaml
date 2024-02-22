@@ -29,8 +29,9 @@ dependencies:
   firebase_app_check: ^0.2.1+8
   path: ^1.8.2
   path_provider: ^2.0.10
-  # tesseract_ocr: ^0.3.1
+  
   flutter_tesseract_ocr: ^0.4.24
+  string_similarity: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -40,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: Icon(trailingIcon),
             onPressed: () {
-              // Handle right icon tap
+              Navigator.pushNamed(context, AppRoutes.userProfileScreen);
             },
           ),
         ],

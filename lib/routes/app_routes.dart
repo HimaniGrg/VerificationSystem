@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:verificationsystem/app_export.dart';
 
 class AppRoutes {
@@ -9,6 +10,8 @@ class AppRoutes {
   static const String otpPageScreen = '/otp_page_screen';
 
   static const String dashboardPageScreen = '/dashboard_page_screen';
+
+  static const String userProfileScreen = '/user_profile_screen';
 
   static const String startVerificationScreen = '/start_verification_screen';
 
@@ -34,7 +37,7 @@ class AppRoutes {
     documentUpload1Screen: (context) => const DocumentUpload1Screen(),
     documentUpload2Screen: (context) => const DocumentUpload2Screen(),
     processingPageScreen: (context) => const ProcessingPageScreen(),
-    resultPageScreen: (context) => const ResultPageScreen()
+    userProfileScreen: (context) => const UserProfileScreen()
   };
 
   // function for replace navigation

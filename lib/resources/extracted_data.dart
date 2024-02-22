@@ -1,9 +1,11 @@
 class ExtractedData {
   String citizenshipBack = '';
   String citizenshipFront = '';
-  String license = '';
+  String licenseText = '';
 
-  Map<String, String> TextFromCitizenship = {};
+  Map<String, String> TextFromCitizenship = {
+    'Name': '',
+  };
   Map<String, String> TextFromLicense = {};
 
   Map<String, String> TextToMapFromCitizenship() {
@@ -44,41 +46,57 @@ class ExtractedData {
 
     print(TextFromCitizenship.entries);
 
+    print(TextFromCitizenship['Name']);
+
     return TextFromCitizenship;
   }
 
-  // Map<String, String> TextToMapFromLicense() {
-  //   List<String> lines = citizenshipBack.split('\n');
-  //   TextFromCitizenship['Name'] = lines
-  //       .firstWhere((line) => line.startsWith('Full Name:'), orElse: () => '')
-  //       .split('Full Name. ')
-  //       .last
-  //       .trim();
+  Map<String, String> TextToMapFromLicense() {
+    List<String> lines = licenseText.split('\n');
 
-  //   TextFromCitizenship['Date of birth'] = lines
-  //       .firstWhere((line) => line.startsWith('Date:'), orElse: () => '')
-  //       .split('date of Birth (AD): ')
-  //       .last
-  //       .trim();
+    // Extracting Name
+    // RegExp nameRegex = RegExp(r'L Name: (.+?) ;', caseSensitive: false);
+    // String? nameMatch = nameRegex.firstMatch(licenseText)?.group(1)?.trim();
+    // Extracting Name
+    RegExp nameRegex =
+        RegExp(r'(Name|Applicant ID): (.+?) ;', caseSensitive: false);
+    String? nameMatch = nameRegex.firstMatch(licenseText)?.group(2)?.trim();
 
-  //   TextFromCitizenship['Birth Place'] = lines
-  //       .firstWhere((line) => line.startsWith('Birth'), orElse: () => '')
-  //       .split('Birth place . ')
-  //       .last
-  //       .trim();
+    // Extracting Date of Birth
+    RegExp dobRegex =
+        RegExp(r'D.O,I.:. (\d{2}-\d{2}-\d{4})', caseSensitive: false);
+    String? dobMatch = dobRegex.firstMatch(licenseText)?.group(1)?.trim();
 
-  //   String line = lines.firstWhere((line) => line.startsWith('Citizenship'));
+    // Extracting Citizenship No.
+    RegExp citizenshipNoRegex =
+        RegExp(r'Citizenship No.: (\S+)', caseSensitive: false);
+    String? citizenshipNoMatch =
+        citizenshipNoRegex.firstMatch(licenseText)?.group(1)?.trim();
 
-  //   // Extract Citizenship Certificate No.
-  //   RegExp certificateNoRegex = RegExp(r'Citizenship Certificate No\. (\S+)');
-  //   String? certificateNoMatch = certificateNoRegex.firstMatch(line)?.group(1);
+    // Extracting Category
+    RegExp categoryRegex = RegExp(r'Category: (\S+)');
+    String? categoryMatch =
+        categoryRegex.firstMatch(licenseText)?.group(1)?.trim();
 
-  //   // Extract Sex
-  //   RegExp sexRegex = RegExp(r'Sex (\S+)');
-  //   String? sexMatch = sexRegex.firstMatch(line)?.group(1);
+    //extracting DL No.
+    // Extracting DL No. with a more flexible regex
+    // Extracting DL No. or License Number with a more flexible regex
+    RegExp dlNoRegex =
+        RegExp(r'(DLNo|License Number):\s*([\w\d.-]+)', caseSensitive: false);
+    String? dlNoMatch = dlNoRegex.firstMatch(licenseText)?.group(2)?.trim();
 
-  //   // Print the results
-  //   TextFromCitizenship['Citizenship No.'] = certificateNoMatch!;
-  //   TextFromCitizenship['Sex'] = sexMatch!;
-  // }
+    // RegExp DLRegex = RegExp(r'DLNo: (\S+)');
+    // String? dlNoMatch = DLRegex.firstMatch(licenseText)?.group(1)?.trim();
+
+    // Store key-value pairs in the map
+    TextFromLicense['Name'] = nameMatch ?? '';
+    TextFromLicense['Date of Birth'] = dobMatch ?? '';
+    TextFromLicense['Citizenship No.'] = citizenshipNoMatch ?? '';
+    TextFromLicense['Category'] = categoryMatch ?? '';
+    TextFromLicense['DL No.'] = dlNoMatch ?? '';
+
+    print(TextFromLicense.entries);
+
+    return TextFromLicense;
+  }
 }

@@ -10,9 +10,9 @@ class ProcessingPageScreen extends StatefulWidget {
 }
 
 class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
-  // add a variable to track whether a data is being loaded
-
   TextExtraction textExtraction = TextExtraction();
+  TextVerification textVerification = TextVerification();
+  ExtractedData details = ExtractedData();
   late Future<Map<String, String>> extractedData;
 
   @override
@@ -47,13 +47,16 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
 
                     // Access and display the extracted data
                     Map<String, String> data = snapshot.data!;
-                    ExtractedData details = ExtractedData();
+
                     details.citizenshipBack = data['citizenship_back']!;
                     details.citizenshipFront = data['citizenship_front']!;
-                    details.license = data['license']!;
+                    details.licenseText = data['license']!;
                     // print(
                     //     "${details.citizenshipBack} \n Citizenship_front: ${details.citizenshipFront} \n License: ${details.license}");
+
+                    details.TextToMapFromLicense();
                     details.TextToMapFromCitizenship();
+
                     return SingleChildScrollView(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.95,
@@ -130,12 +133,22 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                 SizedBox(width: 10),
                                 // Display text on the right side
                                 Container(
+                                  width: 195,
+                                  // decoration: BoxDecoration(
+                                  //   border: Border.all(
+                                  //     color: Colors
+                                  //         .red, // Set your desired border color here
+                                  //     width: 2.0, // Set the border width
+                                  //   ),
+                                  // ),
+
+                                  // Display extracted data
                                   child: Text(
-                                    '${data['license']}',
-                                    maxLines: 10,
+                                    "Name: ${details.TextFromLicense['Name']}\nDOB: ${details.TextFromLicense['Date of Birth']}\nCitizenship No.: ${details.TextFromLicense['Citizenship No.']}\nLicense No.: \n${details.TextFromLicense['DL No.']}\nCategory: ${details.TextFromLicense['Category']}",
+                                    maxLines: 9,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontSize: 16, color: Colors.black),
+                                        fontSize: 17, color: Colors.black),
                                   ),
                                 )
                               ]),
@@ -201,11 +214,18 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                                 SizedBox(width: 10),
                                 // Display text on the right side
                                 Container(
+                                  // decoration: BoxDecoration(
+                                  //   border: Border.all(
+                                  //     color: Colors
+                                  //         .red, // Set your desired border color here
+                                  //     width: 2.0, // Set the border width
+                                  //   ),
+                                  // ),
                                   child:
                                       // Display extracted data
                                       Text(
                                     "Name: ${details.TextFromCitizenship['Name']}\nSex: ${details.TextFromCitizenship['Sex']}\nDOB: ${details.TextFromCitizenship['Date of Birth']}\nCitizenship No.: \n${details.TextFromCitizenship['Citizenship No.']}",
-                                    maxLines: 6,
+                                    maxLines: 8,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 17, color: Colors.black),
@@ -217,13 +237,13 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
                               Container(
                                 height: 50,
                                 // width: 150,
-                                child: CustomElevatedButtonIndicator(
+                                child: CustomElevatedButton(
                                     alignment: Alignment.center,
                                     text: "Verify",
                                     height: 50,
                                     onPressed: () {
                                       //disable the button while uploading
-                                      onTapNext(context);
+                                      onTapVerify(context);
                                     }),
                               )
                             ]),
@@ -277,11 +297,6 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
     );
   }
 
-  /// Navigates to the documentUpload1Screen when the action is triggered.
-  onTapCancel(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.resultPageScreen);
-  }
-
   // Method to show a confirmation dialog before discarding changes
   Future<bool> showDiscardDialog(BuildContext context) async {
     return await showDialog(
@@ -315,7 +330,22 @@ class _ProcessingPageScreenState extends State<ProcessingPageScreen> {
     );
   }
 
-  void onTapNext(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.processingPageScreen);
+  void onTapVerify(BuildContext context) {
+    Map<String, String> citizenship = details.TextToMapFromCitizenship();
+    Map<String, String> license = details.TextToMapFromLicense();
+
+    double? percentage = textVerification.verifyDoc(citizenship, license);
+    print("Similarity Percentage: $percentage%");
+
+    if (percentage != null) {
+      Navigator.pushNamed(
+        context,
+        AppRoutes.resultPageScreen,
+        arguments: {'percentage': percentage},
+      );
+    } else {
+      // Handle the case where percentage is null, log an error or show a message
+      print('Error: Percentage is null.');
+    }
   }
 }

@@ -95,6 +95,7 @@ class StartVerificationScreen extends StatelessWidget {
 
   /// Navigates to the licenseUploadScreen when the action is triggered.
   onTapStart(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.licenseUploadScreen);
+    // Navigator.pushNamed(context, AppRoutes.licenseUploadScreen);
+    Navigator.pushNamed(context, AppRoutes.processingPageScreen);
   }
 }

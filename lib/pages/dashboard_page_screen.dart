@@ -35,7 +35,7 @@ class _DashboardPageScreenState extends State<DashboardPageScreen> {
                 leading: Icon(Icons.person),
                 onTap: () {
                   // Navigate to the profile page
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                  Navigator.pushNamed(context, AppRoutes.userProfileScreen);
                 },
               ),
             ),
@@ -75,7 +75,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
   return CustomAppBar(
     title: 'Dashboard',
     leadingIcon: Icons.dashboard,
-    trailingIcon: Icons.circle_notifications_rounded,
+    trailingIcon: Icons.person,
     automaticallyImplyLeading: false,
   );
 }

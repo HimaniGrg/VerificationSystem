@@ -10,6 +10,7 @@ export 'package:verificationsystem/pages/document_upload_1_screen.dart';
 export 'package:verificationsystem/pages/document_upload_2_screen.dart';
 export 'package:verificationsystem/pages/processing_page_screen.dart';
 export 'package:verificationsystem/pages/result_page_screen.dart';
+export 'package:verificationsystem/pages/user_profile_page.dart';
 
 //themes
 export 'package:verificationsystem/theme/custom_text_style.dart';
@@ -37,3 +38,5 @@ export 'package:verificationsystem/auth/register_auth.dart';
 export 'package:verificationsystem/resources/add_image.dart';
 export 'package:verificationsystem/resources/upload_image.dart';
 export 'package:verificationsystem/resources/text_extraction.dart';
+export 'package:verificationsystem/resources/text_verification.dart';
+export 'package:verificationsystem/resources/extracted_data.dart';
